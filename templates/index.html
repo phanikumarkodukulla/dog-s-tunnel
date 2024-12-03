@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dog's Tunnel Game</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+<style>
+    .about-button {
+        display: inline-block;
+        padding: 15px 30px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: #fff;
+        background: linear-gradient(135deg, #28a745, #218838);
+        border-radius: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .about-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+        background: linear-gradient(135deg, #218838, #1e7e34);
+    }
+
+    .about-button:active {
+        transform: scale(1);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
+    }
+    .bone-icon {
+    position: absolute;
+    top: -30px; /* Adjust this value to place the bone above the circle */
+    left: 80%;
+    transform: translateX(-50%);
+    color: white; /* Bone color */
+}
+ 
+</style>
+<style>
+    /* Body Blur Effect */
+    
+
+   /* Countdown Overlay */
+#countdown {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5rem;
+    font-weight: bold;
+    font-family: 'Luckiest Guy', cursive;
+    color: white;
+    z-index: 1002; /* Ensures countdown is above everything */
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
+    display: none;
+    background-color:gold;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+
+
+    /* Welcome Popup */
+    #welcome-popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        text-align: center;
+        color: white;
+        font-family:'Luckiest Guy', cursive;
+        overflow: hidden;
+    }
+
+    /* Popup Content */
+    #welcome-popup .content {
+        position: relative;
+        top: 30%;
+        margin: 0 auto;
+        max-width: 600px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    /* Start Game Button */
+    #welcome-popup .btn-start-game {
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        text-transform: uppercase;
+    }
+
+    /* Close Button */
+    #welcome-popup .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: white;
+    }
+</style>
+
+</head>
+<body>
+<!-- Welcome Popup -->
+<div id="welcome-popup">
+    <div class="content">
+        <span class="close-btn">&times;</span>
+        <h1>Welcome to Dog's Tunnel</h1>
+         <div class="text-center" style = "justify-content:center;display:flex;">
+            <img src="/static/images/dog.png" alt="Doggy Tunnel Game" class="img" style="border-radius:50px;">
+        </div>
+        </br>
+        <p>Rules: Hit the popping dogs to earn points! You have 30 seconds. Try your best!</p>
+        <button class="btn-start-game">Start Game</button>
+    </div>
+</div>
+
+<!-- Countdown -->
+<div id="countdown"></div>
+
+ <div class="custom-cursor">
+   <!-- The custom Font Awesome cursor -->
+    <i class="fas fa-paw cursor-icon" id="customCursor"></i>
+
+    <script>
+        const cursor = document.getElementById('customCursor');
+
+        // Update the position of the icon to follow the cursor
+        document.addEventListener('mousemove', (event) => {
+            cursor.style.left = `${event.pageX}px`;
+            cursor.style.top = `${event.pageY}px`;
+        });
+    </script>
+    <div class="container text-center py-5">
+        <h1 class="game-title">
+        <i class="fa-solid fa-paw"></i>&nbsp;&nbsp;Dog's Tunnel Game &nbsp;&nbsp;<i class="fa-solid fa-paw"></i>
+        </h1>
+
+      <div class="scoreboard my-3">
+    <div class="wooden-frame">
+        <div class="blackboard">
+            <span class="fs-4">
+                <i class="fa-solid fa-star"></i> Score:
+                <span id="score" class="score-counter">0</span>
+            </span>
+        </div>
+    </div>
+</div>
+
+        <div class="timer my-3">
+            <i class="fa-solid fa-clock"></i> <span id="timer">30</span> Seconds
+        </div>
+<h2 class="game-title">
+                    Dog's Tunnel Game <i class="fa-solid fa-paw"></i>
+                </h2>
+                
+ <div style="position: relative; width: 100%; height: 50px; display: flex; justify-content: center; align-items: center;">
+        <!-- Left line -->
+        <div style="
+            position: absolute;
+            height: 4px;
+            background-color: #00ff00;
+            width: 0%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: growLineLeft 1.5s ease-out forwards;
+        "></div>
+
+        <!-- Paw icon with circle -->
+        <div style="
+            position: relative;
+            z-index: 1;
+            background-color: #1e1e1e;
+            border: 4px solid #00ff00;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+        ">
+            <i class="fa-solid fa-paw" style="color: #00ff00; font-size: 24px;"></i>
+        </div>
+
+        <!-- Right line -->
+        <div style="
+            position: absolute;
+            height: 4px;
+            background-color: #00ff00;
+            width: 0%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: growLineRight 1.5s ease-out forwards;
+            right: 0;
+        "></div>
+    </div>
+        <div id="game-over-popup" class="game-over-popup">
+            <div class="popup-content">
+            <h2 class = "game-tittle">Score - Board</h2>
+             <div class="text-center" style = "justify-content:center;display:flex;">
+            <img src="/static/images/dog.png" alt="Doggy Tunnel Game" class="img" style="border-radius:50px;">
+        </div>
+        </br> <button id="close-popup" class="close-btn">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+
+                <div style="position: relative; width: 100%; height: 50px; display: flex; justify-content: center; align-items: center;">
+        <!-- Left line -->
+        <div style="
+            position: absolute;
+            height: 4px;
+            background-color: #00ff00;
+            width: 0%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: growLineLeft 1.5s ease-out forwards;
+        "></div>
+
+        <!-- Paw icon with circle -->
+        <div style="
+            position: relative;
+            z-index: 1;
+            background-color: #1e1e1e;
+            border: 4px solid #00ff00;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+        ">
+            <i class="fa-solid fa-paw" style="color: #00ff00; font-size: 24px;"></i>
+        </div>
+
+        <!-- Right line -->
+        <div style="
+            position: absolute;
+            height: 4px;
+            background-color: #00ff00;
+            width: 0%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: growLineRight 1.5s ease-out forwards;
+            right: 0;
+        "></div>
+
+    </div>
+                <p>
+                </br>
+                    <i class="fa-solid fa-trophy"></i> Final Score:
+                    <span id="final-score">0</span>
+                     </br>
+                </p>
+                <div style="position: relative; width: 100%; height: 50px; display: flex; justify-content: center; align-items: center;">
+        <!-- Left line -->
+        <div style="
+            position: absolute;
+            height: 4px;
+            background-color: #00ff00;
+            width: 0%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: growLineLeft 1.5s ease-out forwards;
+        "></div>
+
+        <!-- Paw icon with circle -->
+        <div style="
+            position: relative;
+            z-index: 1;
+            background-color: #1e1e1e;
+            border: 4px solid #00ff00;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+        ">
+            <i class="fa-solid fa-paw" style="color: #00ff00; font-size: 24px;"></i>
+        </div>
+
+        <!-- Right line -->
+        <div style="
+            position: absolute;
+            height: 4px;
+            background-color: #00ff00;
+            width: 0%;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: growLineRight 1.5s ease-out forwards;
+            right: 0;
+        "></div>
+    </div>
+                <p>
+                    <i class="fa-solid fa-hourglass-half"></i>Given time :
+                    <span id="final-time">0</span> seconds
+                </p>
+                <button id="restart-game-popup" class="btn btn-warning">
+                    <i class="fa-solid fa-rotate-right"></i> Play Again
+                </button>
+            </div>
+        </div>
+
+        <div id="restart-game-main" class="restart-main my-4">
+            <button class="btn btn-primary">
+                <i class="fa-solid fa-rotate-right"></i> Restart Game
+            </button>
+        </div>
+
+        <div class="game-area row row-cols-4 gx-3 gy-3 justify-content-center">
+            <!-- Generate 8 holes dynamically -->
+            {% for i in range(1, 9) %}
+            <div class="col text-center">
+                <div class="hole-container position-relative">
+                    <i class="fa-solid fa-bone fa-2x bone-icon"></i>
+                    <div class="hole position-relative" id="hole-{{ i }}">
+                        <img src="/static/images/dog.png" class="dog" id="dog-{{ i }}" style="display: none;">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+           <div class="catch-box mt-4">
+            <h3 class="fs-5">Catch Box</h3>
+            <p id="catch-message"></p>
+        </div>
+    </div>
+
+        <a href="{{ url_for('about') }}" class="about-button btn btn-info mt-4">
+            <i class="fa-solid fa-info-circle"></i> About Us
+        </a>
+    </div>
+</div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/static/js/script.js"></script>
+</body>
+
+</html>

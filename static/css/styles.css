@@ -1,0 +1,234 @@
+body {
+    font-family: 'Luckiest Guy', cursive;
+    background: linear-gradient(135deg, #71b280, #134e5e);
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    cursor: none; /* Hide the default cursor */
+
+}
+
+.game-title {
+    font-size: 3rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    color: #ffc107;
+}
+
+/* General scoreboard container */
+.scoreboard {
+    display: inline-block;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+}
+
+/* Wooden frame style */
+.wooden-frame {
+    background: url('/static/images/woodden.jpg') no-repeat center center;
+    background-size: cover;
+    border: 5px solid #8B4513; /* Dark brown border to resemble wood */
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Depth effect */
+}
+
+/* Blackboard style */
+.blackboard {
+    background-color: #022401; /* Dark slate gray for blackboard effect */
+    border-radius: 8px;
+    padding: 10px 20px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); /* Inset shadow for depth */
+    font-family: 'Permanent Marker', cursive; /* Chalk-like font */
+    color: #FFF;
+    font-size: 1.5rem;
+}
+
+/* Score counter style */
+.score-counter {
+    font-size: 2rem; /* Larger font size for emphasis */
+    color: #FFD700; /* Golden-yellow chalk effect for numbers */
+    text-shadow: 1px 1px 0 #444, -1px -1px 0 #000; /* Subtle chalk text shadow */
+}
+
+
+.game-area {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-items: center;
+    margin-top: 30px;
+}
+
+.hole {
+    width: 100px;
+    height: 100px;
+    background-color: #000000;
+    border: 4px solid #6ff476;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+   cursor:pointer;
+
+    transition: transform 0.2s ease-in-out;
+  
+}
+
+.hole:hover {
+    transform: scale(1);
+    background-color: #66bb6a;
+}
+.cursor-icon {
+    position: absolute;
+    font-size: 32px; /* Adjust size as needed */
+    color: #ffc107; /* Customize color */
+    pointer-events: none; /* Ensure the icon doesn't block clicks */
+    transform: translate(-50%, -50%); /* Center the icon on the cursor */
+}
+
+.dog {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 1%;
+    left: 2%;
+    border-radius:50px;
+    display: none;
+    animation: pop-in 0.5s ease-out;
+}
+
+.catch-box {
+    background: url('/static/images/woodden.jpg');
+    padding: 10px;
+    border-radius: 20px;
+    border-color:#000000;
+    border-style:solid;
+    font-size: 1.2rem;
+    color: #ffc107;
+    text-shadow: 1px 1px 3px #000;
+}
+
+
+
+@keyframes pop-in {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.score-counter {
+    color: #ffc107;
+    font-size: 2rem;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .game-area {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+        gap: 15px;
+    }
+
+    .hole {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-area {
+        grid-template-columns: 1fr; /* 1 column on small screens */
+        gap: 10px;
+    }
+
+    .hole {
+        width: 70px;
+        height: 70px;
+    }
+
+    .game-title {
+        font-size: 2rem; /* Adjust font size for smaller screens */
+    }
+}
+/* Popup styles */
+.game-over-popup {
+    position: fixed;
+    top: 20%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(8px); /* Blurred background */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.popup-content {
+    text-align: center;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    animation: fade-in 1s ease-out;
+}
+
+@keyframes fade-in {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes growLineLeft {
+    0% {
+        width: 0%;
+        left: 50%;
+    }
+    100% {
+        width: 50%;
+        left: 0;
+    }
+}
+
+@keyframes growLineRight {
+    0% {
+        width: 0%;
+        right: 50%;
+    }
+    100% {
+        width: 50%;
+        right: 0;
+    }
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: auto;
+}
+
+.restart-main {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.restart-main .btn {
+    display: none;
+}
+

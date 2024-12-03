@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="doggyGameApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doggy Tunnel Game</title>
+    <!-- Bootstrap & Font Awesome -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+    <style>
+        body {
+            font-family:  'Luckiest Guy', cursive;
+            background: radial-gradient(circle, #3e8e41, #1d5127);
+            background-attachment: fixed;
+            background-size: cover;
+            color: white;
+            overflow-x: hidden;
+            margin: 0;
+            cursor:pointer;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid #ff8c00;
+        }
+
+        nav a {
+            font-size: 1.5rem;
+            color: #ff8c00;
+            text-decoration: none;
+            margin: 0 20px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            border-radius: 30px;
+        }
+
+        nav a:hover {
+            background-color: #ff8c00;
+            color: #000;
+        }
+
+        .container {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .game-title {
+            font-size: 4rem;
+            color: white;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.8);
+            animation: titleAnimation 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleAnimation {
+            0% { transform: scale(1.1); }
+            100% { transform: scale(0.9); }
+        }
+
+        .content-section {
+            padding: 50px 20px;
+            animation: fadeIn 0.5s ease;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            margin: 20px auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .developer-section img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            border: 5px solid #ff8c00;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.6);
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        footer {
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            margin-top: 30px;
+            border-top: 2px solid #ff8c00;
+            position:fixed;
+            width:100%;
+        }
+
+        footer a {
+            color: #ffdf00;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #ff8c00;
+        }
+    </style>
+</head>
+<body ng-controller="MainController">
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" ng-click="showSection('aboutGame')" id="aboutGameTab">About Game</a>
+        <a href="#" ng-click="showSection('aboutDeveloper')" id="aboutDevTab">About Developer</a>
+    </nav>
+
+ <div class="container py-5">
+    <!-- About Game Section -->
+    <div class="row align-items-center mb-5" ng-show="currentSection === 'aboutGame'">
+        <div class="col-lg-6 text-center">
+            <img src="/static/images/dog.png" alt="Doggy Tunnel Game" class="img-fluid rounded shadow-lg" style="max-height: 400px; border-radius:50px;">
+        </div>
+        <div class="col-lg-6">
+            <h1 class="display-4  fw-bold mb-3 game-title" style = "color:white;">
+                Dog's Tunnel
+            </h1>
+            <p class="lead">
+                Test your reflexes by catching playful dogs as they pop out of random tunnels! This interactive game features a scoring system, responsive design, and a countdown timer for added excitement.
+            </p>
+            <ul class="list-group mt-4">
+                <li class="list-group-item bg-light d-flex align-items-center">
+                    <i class="fa-solid fa-paw text-warning me-3"></i>Interactive Gameplay
+                </li>
+                <li class="list-group-item bg-light d-flex align-items-center">
+                    <i class="fa-solid fa-trophy text-warning me-3"></i>Scoring System
+                </li>
+                <li class="list-group-item bg-light d-flex align-items-center">
+                    <i class="fa-solid fa-mobile text-warning me-3"></i>Mobile Responsive
+                </li>
+                <li class="list-group-item bg-light d-flex align-items-center">
+                    <i class="fa-solid fa-clock text-warning me-3"></i>Countdown Timer
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- About Developer Section -->
+    <div class="row align-items-center" ng-show="currentSection === 'aboutDeveloper'">
+        <div class="col-lg-6 order-lg-2 text-center">
+            <img src="/static/images/me.jpg" alt="K. Phani Kumar Sharma" class="img-fluid rounded-circle border border-4 border-success shadow-lg" style="max-height: 200px;">
+        </div>
+        <div class="col-lg-6 order-lg-1">
+            <h1 class="display-5   mb-3 game-title">About Developer</h1>
+            <p class="lead">
+                Hi, I'm <strong>K. Phani Kumar Sharma</strong>, a passionate developer and I created various websites some of them are created only by me and some are using ChatGPT and other AI tools.I am a certified developer  and i loves creating immersive and interactive experiences. My portfolio showcases a range of projects highlighting my skills and creativity.Visit my portfolio website to see more of my work and to know more about me.
+            </p>
+            <a href="https://phanikumar-sharma.github.io/Kodukulla.Phani_Kumar_Sharma/" target="_blank" class="btn btn-success btn-lg shadow-sm">
+                <i class="fa-solid fa-globe me-2"></i> Visit My Portfolio
+            </a>
+        </div>
+        
+    </div>
+    <div class="container mt-5" s>
+    <h2 class="text-center mb-4">Technologies Used</h2>
+    <div class="row justify-content-center">
+        <!-- Column 1 -->
+        <div class="col-md-4">
+            <h5 class=" fw-bold">Languages</h5>
+            <ul class="list-group">
+                <li class="list-group-item"><i class="fa-solid fa-code"></i> HTML</li>
+                <li class="list-group-item"><i class="fa-solid fa-code"></i> CSS</li>
+                <li class="list-group-item"><i class="fa-solid fa-code"></i> JavaScript</li>
+            </ul>
+        </div>
+        <!-- Column 2 -->
+        <div class="col-md-4">
+            <h5 class=" fw-bold">Frameworks & Libraries</h5>
+            <ul class="list-group">
+                <li class="list-group-item"><i class="fa-solid fa-cubes"></i> AngularJS</li>
+                <li class="list-group-item"><i class="fa-solid fa-cubes"></i> Flask</li>
+                <li class="list-group-item"><i class="fa-solid fa-cubes"></i> Python</li>
+                <li class="list-group-item"><i class="fa-solid fa-cubes"></i> jQuery</li>
+                <li class="list-group-item"><i class="fa-solid fa-cubes"></i> Bootstrap</li>
+            </ul>
+        </div>
+        <!-- Column 3 -->
+        <div class="col-md-4">
+            <h5 class=" fw-bold">Design & Styling</h5>
+            <ul class="list-group">
+                <li class="list-group-item"><i class="fa-solid fa-paint-brush"></i> Font Awesome</li>
+                <li class="list-group-item"><i class="fa-solid fa-font"></i> Google Fonts</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome Script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer bg-dark text-white text-center py-3 fixed-bottom">
+    <p class="mb-0">© 2024 K. Phani Kumar Sharma | All Rights Reserved</p>
+</footer>
+
+<!-- Custom Styles -->
+<style>
+    /* Typewriter effect for Game Title */
+    .game-title {
+        font-family:  'Luckiest Guy', cursive;
+        color: white;
+        overflow: hidden;
+        white-space: nowrap;
+        border-right: 4px solid #ff4500;
+        width: fit-content;
+        animation: typewriter 3s steps(40, end), blink 0.6s step-end infinite;
+    }
+
+    @keyframes typewriter {
+        from {
+            width: 0;
+        }
+        to {
+            width: 100%;
+        }
+    }
+
+    @keyframes blink {
+        from,
+        to {
+            border-color: transparent;
+        }
+        50% {
+            border-color: #ff4500;
+        }
+    }
+
+    /* Footer Styling */
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background: #212529;
+        color: white;
+    }
+
+    /* Ensure consistent footer position */
+    body {
+        margin-bottom: 60px;
+    }
+</style>
+
+
+    <!-- AngularJS & Bootstrap Scripts -->
+    <script src="https://code.angularjs.org/1.8.2/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // AngularJS App
+        const app = angular.module('doggyGameApp', []);
+        app.controller('MainController', ['$scope', function($scope) {
+            $scope.currentSection = 'aboutGame'; // Default section
+
+            $scope.showSection = function(section) {
+                $scope.currentSection = section;
+                animateContent();
+            };
+        }]);
+
+        // jQuery Animation
+        function animateContent() {
+            $('#dynamicContent').hide().fadeIn(700);
+        }
+    </script>
+
+</body>
+</html>
